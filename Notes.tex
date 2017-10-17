@@ -1,0 +1,47 @@
+\documentclass[a4paper,10pt]{article}
+%\usepackage{attachfile2}
+%\usepackage{navigator}
+\usepackage{float} % override positioning
+\usepackage{graphicx} % this is needed to include figures
+\usepackage{epstopdf} % include eps figures
+\usepackage{enumitem} % uhh not sure if needed, nested lists in ensemble
+\usepackage{amsmath} % used to align equations, NaiveBayes.tex
+%\usepackage{navigator}
+%\usepackage[utf8x]{inputenc} % allow the inverse of \models to be shown....
+\usepackage{hyperref} % hyperlink to sections/subsections
+\usepackage{listings} % used for decision tree, so use verbatim and maths
+\lstset{
+  basicstyle=\ttfamily,
+  mathescape=true,
+  tabsize=4,
+  numbers=left,
+  stepnumber=1,
+  breaklines=true
+}
+\setcounter{tocdepth}{4}
+\setcounter{secnumdepth}{4}
+\begin{document}
+
+\title{ActiveMQ}
+\author{William A O Brown}
+\date{\today}
+\maketitle
+
+\tableofcontents
+\listoffigures
+
+% \input{Glossary.tex}
+%~~~~~~~~~~~~modify below here~~~~~~~~~~~
+%#################################
+
+
+\input{ActiveMQ.tex}
+
+\input{KahaDB.tex}
+
+\section{Sources}
+\url{http://access.redhat.com/documentation/en-US/Fuse_Message_Broker/5.4/html/Using_Persistent_Messages/files/KahaDB-Overview.html}
+
+
+%###################################
+\end{document}

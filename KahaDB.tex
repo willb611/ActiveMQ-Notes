@@ -1,0 +1,30 @@
+\section{KahaDB: A primer}
+	\subsection{What is KahaDB?}
+	KahaDB is an embedded lightweight non-relational database
+
+	\subsection{How does it store messages?}
+	Messages are stored in file-based data logs. When all of the messages in a data log have been successfully consumed, the data log is marked as deletable. At a predetermined clean-up interval, logs marked as deletable are removed from the system.
+
+
+	\subsection{What are the files in KahaDB directory?}
+		\begin{description}
+			\item[db.data] \hfill \\
+				The metadata store, mainly B-tree index giving message locations in the data logs. The file is periodically updated from the metadata cache (which is in memory).
+			\item[db-n.log] \hfill \\
+				These are the journal log files. This is where activeMQ messages will be stored.
+			\item[db.free] \hfill \\
+				Keeps track of free pages in db.data
+			\item[db.redo] \hfill \\
+				This is a redo log used to prevent partial page writes from making the file inconsistent.
+		\end{description}
+
+
+	\subsection{Recovering a corrupted metadata store}
+	If the metadata store somehow becomes irretrievably corrupted, you can force recovery as follows (assuming the journal's data logs are clean):
+
+	\begin{itemize}
+    	\item While the broker is shut down, delete the metadata store, db.data.
+    	\item Start the broker.
+    	\item The broker now recovers by re-reading the entire journal and replaying all of the events in the journal in order to recreate the missing metadata.
+    \end{itemize}
+	While this is an effective means of recovering, you should bear in mind that it could take a considerable length of time if the journal is large.

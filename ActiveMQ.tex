@@ -1,12 +1,76 @@
 \section{ActiveMQ}
-Apache ActiveMQ ™ is the most popular and powerful open source messaging and Integration Patterns server.
+Apache ActiveMQ ™ is the most popular and powerful open source messaging and Integration Patterns server. ActiveMQ is written and runs in Java. It uses KahaDB database store, which is journal based. See section \ref{sec:kahadb} on KahaDB for more details.
 
-	\subsection{Files found in activemq/data}
-	\begin{description}
-		\item[acteivemq.pid] \hfill \\
-			PID (Process ID) of the MQ when it starts.
-		\item[activemq.log] \hfill \\
-			Log output from the MQ. Verbosity of this file can be controlled.
-		\item[stop.pid] \hfill \\
-			PID (process ID) of the MQ when it stopped.
-	\end{description}
+  \subsection{Transport method}
+  ActiveMQ by default uses openwire, though it can be configured to use others (e.g. amqp, stomp, etc.).
+
+  \subsection{Message structure}
+  It depends on the type of message. An example TextMessage can be seen in the snippet below. It clearly shows the metadata associated with the message. This might be helpful, e.g. to see the producer of the message (via producerId attribute).
+
+  \begin{lstlisting}[caption={Example ActiveMQ TextMessage}]
+  ActiveMQTextMessage {commandId = 502, responseRequired = true, messageId = ID:Terrier-39995-1511030163394-1:1:1:1:498, originalDestination = null, originalTransactionId = null, producerId = ID:Terrier-39995-1511030163394-1:1:1:1, destination = queue://FOO.BAR, transactionId = null, expiration = 0, timestamp = 1511030165060, arrival = 0, brokerInTime = 1511030165060, brokerOutTime = 1511030165090, correlationId = null, replyTo = null, persistent = true, type = null, priority = 4, groupID = null, groupSequence = 0, targetConsumerId = null, compressed = false, userID = null, content = org.apache.activemq.util.ByteSequence@69997e9d, marshalledProperties = null, dataStructure = null, redeliveryCounter = 0, size = 0, properties = null, readOnlyProperties = true, readOnlyBody = true, droppable = false, jmsXGroupFirstForConsumer = false, text = 497: hello Another Message}
+  \end{lstlisting}
+
+  \subsection{Folder and directory layout}
+    \subsubsection{Root directory}
+    This is the layout of the install location. i.e. \verb+/opt//opt/apache-activemq-5.15.2+. The interesting directories are bin, conf and data.
+    \begin{lstlisting}[caption={Sample root directory layout}]
+root@88a599d72811:/opt/apache-activemq-5.15.2# ls -lh 
+total 18M
+-rwxr-xr-x 1 root root  18M Oct 17 14:25 activemq-all-5.15.2.jar
+drwxr-xr-x 5 root root 4.0K Nov 10 23:15 bin
+drwxr-xr-x 2 root root 4.0K Nov 10 23:15 conf
+drwxr-xr-x 3 root root 4.0K Nov 18 17:49 data
+drwxr-xr-x 2 root root 4.0K Nov 10 23:15 docs
+drwxr-xr-x 7 root root 4.0K Oct 17 14:28 examples
+drwxr-xr-x 6 root root 4.0K Nov 10 23:15 lib
+-rw-r--r-- 1 root root  40K Oct 17 14:28 LICENSE
+-rw-r--r-- 1 root root 3.3K Oct 17 14:28 NOTICE
+-rw-r--r-- 1 root root 2.6K Oct 17 14:28 README.txt
+drwxr-xr-x 4 root root 4.0K Nov 18 17:49 tmp
+drwxr-xr-x 6 root root 4.0K Nov 10 23:15 webapps
+drwxr-xr-x 3 root root 4.0K Nov 10 23:15 webapps-demo
+    \end{lstlisting}
+
+    \subsubsection{conf subdirectory}
+    This is the default location where configuration is stored. Interesting files here are activemq.xml (configuration file for the activemq broker), log4j.properties, jmx.access, jmx.password.
+    \begin{lstlisting}[caption={Sample conf sub-directory layout}]
+    root@88a599d72811:/opt/apache-activemq-5.15.2/conf# ls -l  
+total 80
+-rwxrwxrwx 1 root root 5906 Nov 10 21:03 activemq.xml
+-rw-r--r-- 1 root root 1370 Oct 17 14:17 broker.ks
+-rw-r--r-- 1 root root  592 Oct 17 14:17 broker-localhost.cert
+-rw-r--r-- 1 root root  665 Oct 17 14:17 broker.ts
+-rw-r--r-- 1 root root 1357 Oct 17 14:17 client.ks
+-rw-r--r-- 1 root root  665 Oct 17 14:17 client.ts
+-rw-r--r-- 1 root root 1172 Oct 17 14:28 credentials-enc.properties
+-rw-r--r-- 1 root root 1121 Oct 17 14:28 credentials.properties
+-rw-r--r-- 1 root root  962 Oct 17 14:28 groups.properties
+-rw-r--r-- 1 root root 1011 Oct 17 14:28 java.security
+-rw-r--r-- 1 root root 1087 Oct 17 14:28 jetty-realm.properties
+-rw-r--r-- 1 root root 7795 Oct 17 14:28 jetty.xml
+-rwxrwxrwx 1 root root  965 Oct 17 14:28 jmx.access
+-rwxrwxrwx 1 root root  964 Oct 17 14:28 jmx.password
+-rwxrwxrwx 1 root root 2240 Nov 10 20:47 log4j.properties
+-rw-r--r-- 1 root root 1207 Oct 17 14:28 logging.properties
+-rw-r--r-- 1 root root 1016 Oct 17 14:28 login.config
+-rw-r--r-- 1 root root  961 Oct 17 14:28 users.properties
+    \end{lstlisting}
+
+    \subsubsection{data subdirectory}
+    This is the default location where data is stored during runtime. Logs, messages written to disk, pid files etc all exist here. See example structure:
+    \begin{lstlisting}[caption={Sample data sub-directory layout}]
+    root@88a599d72811:/opt/apache-activemq-5.15.2/data# ls -l 
+total 8
+-rw-r--r-- 1 root root    0 Oct 17 14:28 activemq.log
+-rw-r--r-- 1 root root    3 Nov 18 17:49 activemq.pid
+drwxr-xr-x 2 root root 4096 Nov 18 17:49 kahadb
+    \end{lstlisting}
+    \begin{description}
+      \item[acteivemq.pid] \hfill \\
+        PID (Process ID) of the MQ when it starts.
+      \item[activemq.log] \hfill \\
+        Log output from the MQ. Verbosity of this file can be controlled.
+      \item[stop.pid] \hfill \\
+        PID (process ID) of the MQ when it stopped.
+    \end{description}

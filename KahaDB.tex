@@ -1,4 +1,5 @@
 \section{KahaDB: A primer}
+\label{sec:kahadb}
 	\subsection{What is KahaDB?}
 	KahaDB is an embedded lightweight non-relational database
 
@@ -27,4 +28,4 @@
     	\item Start the broker.
     	\item The broker now recovers by re-reading the entire journal and replaying all of the events in the journal in order to recreate the missing metadata.
     \end{itemize}
-	While this is an effective means of recovering, you should bear in mind that it could take a considerable length of time if the journal is large.
+	While this is an effective means of recovering, you should bear in mind that it could take a considerable length of time if the journal is large. Also if the journal logs are dirty, you might not be able to recover the data store. In that case just delete kahadb folder completely and restart the broker.
